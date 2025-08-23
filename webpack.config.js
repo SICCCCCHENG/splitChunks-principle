@@ -9,9 +9,14 @@ module.exports = {
         // // page3: './src/page3.js',
 
         // case 2
-        page1: './src/case2/page1.js',
-        page2: './src/case2/page2.js',
-        page3: './src/case2/page3.js',
+        // page1: './src/case2/page1.js',
+        // page2: './src/case2/page2.js',
+        // page3: './src/case2/page3.js',
+
+        // case 3
+        page1: './src/case3/page1.js',
+        page2: './src/case3/page2.js',
+        page3: './src/case3/page3.js',
     },
     optimization: {
         // 设置代码块分割方案
@@ -29,7 +34,7 @@ module.exports = {
 
             // 提取之后的总大小
             minSize: 0,  // 被提取代码块的最小尺寸   默认值 30k(大于30k才会被提取)
-            
+
             // 公共代码块叫  page1~page2
             name: true,  // 设置代码块打包后的名称   默认名称是用分隔符 ~ 分割开的原始代码块
             automaticNameDelimiter: '~',
@@ -39,7 +44,7 @@ module.exports = {
                 // 把符合条件的缓存组都放在 vendors 代码块里
                 // 第三方提供的
                 vendors: {
-                    chunks: 'all',  // 此处优先级高
+                    // chunks: 'all',  // 此处优先级高
                     test: /[\\/]node_modules[\\/]/,   // 条件
                     // 如果一个模块符合多个缓存组的条件
                     priority: -10, //数字越大,优先级越高
@@ -47,14 +52,29 @@ module.exports = {
                 // 提取不同代码块之间的公共代码
                 // commons~page1~page2
                 // commons 名字随便写 default(优先级是 -20) 都可,如果优先级低于 -20, 且配置一样 就会走默认了
-                commons: {
-                    chunks: 'all',
+                default: {
+                    // chunks: 'all',
                     minChunks: 2,  // 个数: 如果一个代码块被两个以及两个以上的代码块引用,就可以提取出来
                     // minSize: 8, // 还要大于8字节 才可以被提取    默认 30000 -> 30k   // 提取之后的总大小
-                    priority: -20,  
+                    priority: -20,
                     // reuseExistingChunk: true
                 }
             }
         }
     }
 }
+
+
+
+/**
+ * 应该出现以下结果
+ * 
+ * vendors~page1~page2~page3.js: jquery
+ * vendors~asyncModule1.js: lodash
+ * asyncModule1.js: asyncModule1.js
+ * default~page1~page2~page3.js:  module1 
+ * 
+ * page1: page1
+ * page2: page2
+ * page3: page3 + module3
+ */
