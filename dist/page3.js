@@ -81,14 +81,14 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = "./src/case2/page2.js");
+/******/ 	return __webpack_require__(__webpack_require__.s = "./src/case2/page3.js");
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ "./src/case2/page2.js":
+/***/ "./src/case2/page3.js":
 /*!****************************!*\
-  !*** ./src/case2/page2.js ***!
+  !*** ./src/case2/page3.js ***!
   \****************************/
 /*! no static exports found */
 /***/ (function(module, exports) {

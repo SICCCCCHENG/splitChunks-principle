@@ -1,4 +1,6 @@
 const title = require('./title')
-let lodash = require ('lodash')
+const sum = require('./sum')
+let isarray = require ('isarray')
 console.log(title);
-console.log(lodash);
+console.log(sum);
+console.log(isarray([]));
