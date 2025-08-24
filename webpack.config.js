@@ -1,4 +1,4 @@
-
+const HtmlWebpackPlugin = require("html-webpack-plugin")
 
 module.exports = {
     mode: 'development',
@@ -14,9 +14,13 @@ module.exports = {
         // page3: './src/case2/page3.js',
 
         // case 3
-        page1: './src/case3/page1.js',
-        page2: './src/case3/page2.js',
-        page3: './src/case3/page3.js',
+        // page1: './src/case3/page1.js',
+        // page2: './src/case3/page2.js',
+        // page3: './src/case3/page3.js',
+
+        // case4
+        home: './src/case4-runtime原理/home.js',
+        login: './src/case4-runtime原理/login.js',
     },
     optimization: {
         // 设置代码块分割方案
@@ -31,10 +35,10 @@ module.exports = {
 
             // 同一个入口分割出来的最大异步请求数  表示一个入口最多可以分割几个代码块出来(包括自己)
             // 此处看优先级, 优先级高的先分割, 不够了的就放一起
-            maxAsyncRequests: 10,  // 同一个入口分割出来的最大异步请求数
+            maxAsyncRequests: 3,  // 同一个入口分割出来的最大异步请求数
             // 同一个入口分割出来的最大同步请求数  表示一个入口最多可以分割几个代码块出来(包括自己)
             // 此处看优先级, 优先级高的先分割, 不够了的就放一起
-            maxInitialRequests: 3,
+            maxInitialRequests: 5,
 
             // 提取之后的总大小
             minSize: 0,  // 被提取代码块的最小尺寸   默认值 30k(大于30k才会被提取)
@@ -52,7 +56,7 @@ module.exports = {
                     test: /[\\/]node_modules[\\/]/,   // 条件
                     // 如果一个模块符合多个缓存组的条件
                     priority: -10, //数字越大,优先级越高
-                    reuseExistingChunk: true  // 表示已经生成了, 就不再额外生成了, 共用一份
+                    reuseExistingChunk: false  // 表示已经生成了, 就不再额外生成了, 共用一份
                 },
                 // 提取不同代码块之间的公共代码
                 // commons~page1~page2
@@ -62,7 +66,7 @@ module.exports = {
                     minChunks: 2,  // 个数: 如果一个代码块被两个以及两个以上的代码块引用,就可以提取出来
                     // minSize: 8, // 还要大于8字节 才可以被提取    默认 30000 -> 30k   // 提取之后的总大小
                     priority: -20,
-                    reuseExistingChunk: true  // 表示已经生成了, 就不再额外生成了, 共用一份
+                    reuseExistingChunk: false  // 表示已经生成了, 就不再额外生成了, 共用一份
                 }
             }
         },
@@ -74,7 +78,19 @@ module.exports = {
             提高缓存效率：运行时代码通常变化较少，单独提取后可以利用浏览器缓存，当业务代码变化时，运行时代码的缓存仍然有效。
          */
         runtimeChunk: true
-    }
+    },
+    plugins: [
+        new HtmlWebpackPlugin({
+            template: './src/case4-runtime原理/index.html',
+            chunks: ['home'],
+            filename: 'home.html'
+        }),
+        new HtmlWebpackPlugin({
+            template: './src/case4-runtime原理/index.html',
+            chunks: ['login'],
+            filename: 'login.html'
+        })
+    ]
 }
 
 
@@ -83,12 +99,12 @@ module.exports = {
 
 /**
  * case 3 应该出现以下结果
- * 
+ *
  * vendors~page1~page2~page3.js: jquery
  * vendors~asyncModule1.js: lodash
  * asyncModule1.js: asyncModule1.js
- * default~page1~page2~page3.js:  module1 
- * 
+ * default~page1~page2~page3.js:  module1
+ *
  * page1: page1
  * page2: page2
  * page3: page3 + module3
@@ -97,7 +113,7 @@ module.exports = {
 
 // runtimeChunk below
 /**
- * 
+ *
  * 什么是运行时代码？
     运行时代码是 webpack 在打包过程中自动生成的代码，用于：
     模块加载和解析：处理模块之间的依赖关系
@@ -133,3 +149,7 @@ module.exports = {
     体积优化：主 bundle 更小，加载更快
     当你的应用有多个页面或使用动态导入时，分离运行时代码的好处就体现出来了。
  */
+
+
+
+// case4
